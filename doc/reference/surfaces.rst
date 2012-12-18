@@ -139,6 +139,24 @@ class Surface()
       rendering on them, print surfaces to disable hinting of metrics and so
       forth. The result can then be used with :class:`ScaledFont`.
 
+   .. method:: get_mime_data(mime_type)
+
+      :param mime_type: the MIME type of the image data
+      :type mime_type: string
+      :returns: a read-only Python buffer object or :obj:`None`
+
+      Return mime data previously attached to surface
+      with :meth:`.set_mime_data` using the specified mime type.
+      If no data has been attached with the given mime type,
+      :obj:`None` is returned.
+
+      **Warning:** the returned buffer is only safe to use as long as
+      the *Surface* object is alive and
+      the data has not been removed or overridden
+      through :meth:`set_mime_data`.
+
+      .. versionadded:: 1.10.1
+
    .. method:: mark_dirty()
 
       Tells cairo that drawing has been done to *Surface* using means other
@@ -213,6 +231,37 @@ class Surface()
       dimensions.
 
       .. versionadded:: 1.2
+
+   .. method:: set_mime_data(mime_type, data)
+
+      :param mime_type: the MIME type of the image data
+      :type mime_type: string
+      :param data: the image data to attach to the surface
+      :type data: buffer
+
+      Attach an image in the format :obj:`mime_type` to *Surface*.
+      To remove the data from a surface,
+      call this function with same mime type and :obj:`None` for data.
+
+      The attached image (or filename) data can later be used
+      by backends which support it
+      (currently: PDF, PS, SVG and Win32 Printing surfaces)
+      to emit this data instead of making a snapshot of the surface.
+      This approach tends to be faster and requires less memory and disk space.
+
+      The recognized MIME types are the following:
+      ``"image/jpeg"``,
+      ``"image/png"``,
+      ``"image/jp2"``,
+      ``"text/x-uri"``.
+
+      See corresponding backend surface docs for details
+      about which MIME types it can handle.
+      Caution: the associated MIME data will be discarded
+      if you draw on the surface afterwards.
+      Use this function with care.
+
+      .. versionadded:: 1.10.1
 
    .. method:: show_page()
 
