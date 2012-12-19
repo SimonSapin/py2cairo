@@ -3,7 +3,6 @@
 import distutils.core      as dic
 import distutils.dir_util  as dut
 import distutils.file_util as fut
-import distutils.sysconfig as dsy
 import io
 import os
 import subprocess
@@ -106,11 +105,11 @@ dic.setup(
   name = "pycairo",
   version = pycairo_version,
   description = "python interface for cairo",
+  packages=['cairo'],
+  package_dir={'cairo': 'src'},
   ext_modules = [cairo],
   data_files = [
     ('include/pycairo', ['src/pycairo.h']),
     ('lib/pkgconfig', [pkgconfig_file]),
-    (os.path.join(dsy.get_python_lib(), 'cairo'),
-     ['src/__init__.py']),
     ],
   )
