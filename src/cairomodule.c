@@ -49,6 +49,10 @@ PyObject *xpybVISUALTYPE_type;
 /* A module specific exception */
 PyObject *CairoError = NULL;
 
+/* A dict of python strings to PyCapsule objects containing pointers
+ * to CAIRO_MIME_TYPE_* constants. */
+PyObject *Pycairo_mime_type_map = NULL;
+
 int
 Pycairo_Check_Status (cairo_status_t status) {
   if (PyErr_Occurred() != NULL)
@@ -358,6 +362,17 @@ init_cairo(void)
   Py_INCREF(CairoError);
   if (PyModule_AddObject(m, "Error", CairoError) < 0)
     return;
+
+  if (Pycairo_mime_type_map == NULL) {
+    Pycairo_mime_type_map = PyDict_New();
+    #define ADD_MIME_TYPE(x) \
+    PyDict_SetItemString(Pycairo_mime_type_map, x, \
+                         PyCObject_FromVoidPtr(x, NULL));
+    ADD_MIME_TYPE(CAIRO_MIME_TYPE_JPEG);
+    ADD_MIME_TYPE(CAIRO_MIME_TYPE_PNG);
+    ADD_MIME_TYPE(CAIRO_MIME_TYPE_JP2);
+    ADD_MIME_TYPE(CAIRO_MIME_TYPE_URI);
+  }
 
     /* constants */
 #if CAIRO_HAS_ATSUI_FONT
