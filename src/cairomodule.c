@@ -367,7 +367,7 @@ init_cairo(void)
     Pycairo_mime_type_map = PyDict_New();
     #define ADD_MIME_TYPE(x) \
     PyDict_SetItemString(Pycairo_mime_type_map, x, \
-                         PyCapsule_New(x, NULL, NULL));
+                         PyCObject_FromVoidPtr(x, NULL));
     ADD_MIME_TYPE(CAIRO_MIME_TYPE_JPEG);
     ADD_MIME_TYPE(CAIRO_MIME_TYPE_PNG);
     ADD_MIME_TYPE(CAIRO_MIME_TYPE_JP2);

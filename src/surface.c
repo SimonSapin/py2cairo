@@ -349,7 +349,7 @@ _get_mime_type(PyObject *obj) {
     return NULL;
   }
 
-  result = PyCapsule_GetPointer(capsule, NULL);
+  result = PyCObject_AsVoidPtr(capsule);
   Py_DECREF(capsule);
   return result;
 }
